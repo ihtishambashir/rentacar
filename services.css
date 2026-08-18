@@ -1132,3 +1132,184 @@ footer {
         align-items: stretch;
     }
 }
+
+
+/* =====================================================
+   SERVICE REQUEST FORMS
+===================================================== */
+.service-label-strip {
+    background: #111;
+    color: #fff;
+}
+
+.service-label-strip-inner {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(18px, 5vw, 56px);
+    flex-wrap: wrap;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-weight: 700;
+}
+
+.service-label-strip-inner span + span::before {
+    content: "•";
+    margin-right: clamp(18px, 5vw, 56px);
+    opacity: .45;
+}
+
+.service-contact-form {
+    gap: 20px;
+}
+
+.form-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.form-section-heading span {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0,.16);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.form-section-heading h4 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: -.01em;
+}
+
+.form-row-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.form-group-small {
+    max-width: 150px;
+}
+
+.required-mark {
+    color: #a53030;
+}
+
+.field-help,
+.form-note-inline,
+.file-upload-meta {
+    display: block;
+    margin-top: 7px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.form-submit-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.form-submit-row .service-form-status {
+    flex: 1 1 250px;
+}
+
+.photo-upload-group input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.file-upload-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.file-list {
+    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #333;
+    word-break: break-word;
+}
+
+.rental-offer-card {
+    min-height: 210px;
+}
+
+@media (max-width: 900px) {
+    .form-row-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .form-group-small {
+        max-width: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .service-label-strip-inner {
+        padding: 14px 20px;
+        gap: 10px;
+    }
+
+    .service-label-strip-inner span + span::before {
+        margin-right: 10px;
+    }
+
+    .form-row-3 {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+
+/* ========================================
+   DEDICATED RENTAL / MOVING PAGES
+======================================== */
+.service-page-hero {
+    padding: 150px 0 90px;
+    background: linear-gradient(135deg, #f4f1eb 0%, #fbfaf7 55%, #ece8df 100%);
+    border-bottom: 1px solid rgba(15, 15, 15, 0.08);
+}
+.service-page-hero .container { max-width: 900px; }
+.service-page-hero h1 { margin: 14px 0 20px; font-size: clamp(48px, 6vw, 78px); line-height: .98; }
+.service-page-hero p:last-child { max-width: 700px; font-size: 18px; line-height: 1.7; color: rgba(15,15,15,.72); }
+.dedicated-form-page { padding-bottom: 28px; }
+.service-form-page { padding: 20px 0 120px; }
+.service-form-page-grid { display:grid; grid-template-columns:minmax(240px,.72fr) minmax(0,1.28fr); gap:70px; align-items:start; }
+.service-form-page .service-contact-copy { position: sticky; top: 110px; }
+.form-page-note { display:flex; flex-direction:column; gap:4px; margin-top:28px; padding:18px 20px; border-left:3px solid #111; background:rgba(255,255,255,.55); }
+.form-page-note span { color:rgba(15,15,15,.62); font-size:14px; }
+.service-choice-section { padding:100px 0 120px; background:#f8f7f3; }
+.service-choice-header { max-width:760px; margin-bottom:48px; }
+.service-choice-header h2 { font-size:clamp(42px,5vw,66px); line-height:1; margin:12px 0 18px; }
+.service-choice-header > p:last-child { max-width:660px; color:rgba(15,15,15,.68); font-size:17px; line-height:1.7; }
+.service-choice-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+.service-choice-card { padding:38px; background:#fff; border:1px solid rgba(15,15,15,.08); min-height:300px; display:flex; flex-direction:column; align-items:flex-start; box-shadow:0 16px 45px rgba(15,15,15,.04); }
+.service-choice-number { font-size:13px; letter-spacing:.14em; opacity:.55; }
+.service-choice-card h3 { font-size:32px; margin:28px 0 12px; }
+.service-choice-card p { color:rgba(15,15,15,.68); line-height:1.7; max-width:520px; margin-bottom:28px; }
+.service-choice-card .btn { margin-top:auto; }
+@media (max-width: 900px) {
+    .service-form-page-grid, .service-choice-grid { grid-template-columns:1fr; gap:32px; }
+    .service-form-page .service-contact-copy { position:static; }
+    .service-page-hero { padding:120px 0 70px; }
+}
+@media (max-width: 560px) {
+    .service-choice-card { padding:28px; }
+    .service-page-hero h1 { font-size:46px; }
+}
+
+.footer-services { margin-top: 20px; padding: 0; border: 0; background: transparent; display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.footer-services span { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #7a7a7a; }

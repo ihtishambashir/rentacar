@@ -1,15 +1,21 @@
-const { requiredBody, sendEmail, json } = require("../lib/mail.js");
+const { requiredBody, sendEmail, json, parseRequest } = require("../lib/mail.js");
 
 module.exports = async function handler(request) {
   if (request.method !== "POST") return json({ message: "Method not allowed" }, 405);
 
-  let body;
-  try { body = await request.json(); }
-  catch { return json({ message: "Invalid request." }, 400); }
-
-  if (!requiredBody(body, ["name", "email", "message"])) {
-    return json({ message: "Please complete all required fields." }, 400);
+  let parsed;
+  try {
+    parsed = await parseRequest(request);
+  } catch (error) {
+    return json({ message: error.message || "Invalid request." }, 400);
   }
 
-  return sendEmail(body, "VertexRent – General Contact Request");
+  const body = parsed.fields;
+  if (!requiredBody(body, ["name", "email", "message"])) {
+    return json({ message: "Please complete your name, email and message." }, 400);
+  }
+
+  return sendEmail(body, "VertexRent – General Contact Request", {
+    customerSubject: "Your VertexRent contact request has been received",
+  });
 };

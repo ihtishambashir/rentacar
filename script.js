@@ -168,23 +168,96 @@ if (contactDateFrom && contactDateTo) {
    FORM SUBMISSION - VERCEL API
 ======================================== */
 
+function setFormStatus(form, message, type = "") {
+    const status = form.querySelector(".service-form-status") || form.querySelector(".form-note");
+    if (!status) return;
+    status.textContent = message;
+    status.classList.remove("is-success", "is-error");
+    if (type) status.classList.add(type);
+}
+
+function getTodayString() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+async function compressImage(file, maxDimension = 1600, quality = 0.78) {
+    if (!file.type.startsWith("image/")) return file;
+
+    const imageUrl = URL.createObjectURL(file);
+    try {
+        const image = await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = imageUrl;
+        });
+
+        const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+        const width = Math.max(1, Math.round(image.naturalWidth * scale));
+        const height = Math.max(1, Math.round(image.naturalHeight * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext("2d", { alpha: false });
+        context.drawImage(image, 0, 0, width, height);
+
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", quality));
+        if (!blob) return file;
+
+        const baseName = file.name.replace(/\.[^.]+$/, "") || "photo";
+        return new File([blob], `${baseName}.jpg`, { type: "image/jpeg" });
+    } finally {
+        URL.revokeObjectURL(imageUrl);
+    }
+}
+
+async function buildMultipartFormData(form) {
+    const formData = new FormData(form);
+    const photoInput = form.querySelector('input[type="file"][name="photos"]');
+
+    if (!photoInput || !photoInput.files.length) {
+        return formData;
+    }
+
+    if (photoInput.files.length > 5) {
+        throw new Error("Please select no more than 5 photos.");
+    }
+
+    formData.delete("photos");
+    let totalBytes = 0;
+
+    for (const file of photoInput.files) {
+        const optimized = await compressImage(file);
+        totalBytes += optimized.size;
+        if (totalBytes > 3 * 1024 * 1024) {
+            throw new Error("Your optimized photos are too large. Please choose fewer or smaller images (max. 3 MB total).");
+        }
+        formData.append("photos", optimized, optimized.name);
+    }
+
+    return formData;
+}
+
 async function submitToContactApi(form, endpoint) {
     const status = form.querySelector(".service-form-status") || form.querySelector(".form-note");
     const button = form.querySelector("button[type=submit]");
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
 
-    if (status) {
-        status.textContent = "Sending…";
-        status.classList.remove("is-success", "is-error");
+    setFormStatus(form, "Sending…");
+    if (button) {
+        button.disabled = true;
+        button.dataset.originalText = button.textContent;
+        button.textContent = "Sending…";
     }
-    if (button) button.disabled = true;
 
     try {
+        const formData = await buildMultipartFormData(form);
         const response = await fetch(endpoint, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
+            body: formData
         });
 
         const result = await response.json().catch(() => ({}));
@@ -192,66 +265,67 @@ async function submitToContactApi(form, endpoint) {
             throw new Error(result.message || "The request could not be sent.");
         }
 
-        if (status) {
-            status.textContent = result.message || "Thank you. Your request has been sent.";
-            status.classList.add("is-success");
-        }
         form.reset();
+        updateRentalDuration();
+        updatePhotoList();
+        setFormStatus(form, result.message || "Thank you. Your request has been sent successfully.", "is-success");
         return true;
     } catch (error) {
-        if (status) {
-            status.textContent = error.message || "Something went wrong. Please try again.";
-            status.classList.add("is-error");
-        } else {
-            alert(error.message || "Something went wrong. Please try again.");
-        }
+        setFormStatus(form, error.message || "Something went wrong. Please try again.", "is-error");
         return false;
     } finally {
-        if (button) button.disabled = false;
+        if (button) {
+            button.disabled = false;
+            button.textContent = button.dataset.originalText || "Send Request";
+        }
     }
 }
 
-const bookingForm = document.getElementById("bookingForm");
-const bookingService = document.getElementById("service");
-const bookingVehicleGroup = document.getElementById("bookingVehicleGroup");
-const bookingVehicle = document.getElementById("vehicle");
+const minToday = getTodayString();
 
-function updateBookingServiceFields() {
-    if (!bookingService || !bookingVehicleGroup || !bookingVehicle) return;
+const rentalFrom = document.getElementById("rental-date-from");
+const rentalTo = document.getElementById("rental-date-to");
+const rentalDuration = document.getElementById("rental-duration");
 
-    const isRental = bookingService.value === "rental-car";
-
-    // Vehicle selection belongs only to Rental Cars.
-    bookingVehicleGroup.hidden = !isRental;
-    bookingVehicle.disabled = !isRental;
-    bookingVehicle.required = isRental;
-
-    if (!isRental) {
-        bookingVehicle.value = "";
-    } else if (!bookingVehicle.value) {
-        bookingVehicle.value = "available-rental-vehicle";
+function updateRentalDuration() {
+    if (!rentalFrom || !rentalTo || !rentalDuration) return;
+    if (!rentalFrom.value || !rentalTo.value) {
+        rentalDuration.value = "—";
+        return;
     }
+    const start = new Date(`${rentalFrom.value}T00:00:00`);
+    const end = new Date(`${rentalTo.value}T00:00:00`);
+    const days = Math.round((end - start) / 86400000) + 1;
+    rentalDuration.value = days > 0 ? `${days} day${days === 1 ? "" : "s"}` : "—";
 }
 
-if (bookingService) {
-    bookingService.addEventListener("change", updateBookingServiceFields);
-    updateBookingServiceFields();
-}
-
-if (bookingForm) {
-    bookingForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        submitToContactApi(bookingForm, "/api/booking");
+if (rentalFrom && rentalTo) {
+    rentalFrom.min = minToday;
+    rentalTo.min = minToday;
+    rentalFrom.addEventListener("change", () => {
+        rentalTo.min = rentalFrom.value || minToday;
+        if (rentalTo.value && rentalTo.value < rentalFrom.value) rentalTo.value = "";
+        updateRentalDuration();
     });
+    rentalTo.addEventListener("change", updateRentalDuration);
+    updateRentalDuration();
 }
 
-const contactForm = document.getElementById("contactForm");
-if (contactForm) {
-    contactForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        submitToContactApi(contactForm, "/api/contact");
-    });
+const movingDate = document.getElementById("moving-date");
+if (movingDate) movingDate.min = minToday;
+
+function updatePhotoList() {
+    const input = document.getElementById("moving-photos");
+    const list = document.getElementById("moving-photo-list");
+    if (!input || !list) return;
+    const files = Array.from(input.files || []);
+    list.textContent = files.length
+        ? files.map((file) => file.name).join(" • ")
+        : "No photos selected.";
 }
+
+const movingPhotos = document.getElementById("moving-photos");
+if (movingPhotos) movingPhotos.addEventListener("change", updatePhotoList);
 
 const serviceForms = document.querySelectorAll("[data-service-form]");
 serviceForms.forEach((form) => {
@@ -262,26 +336,13 @@ serviceForms.forEach((form) => {
     });
 });
 
-
-/* ========================================
-   SERVICE FORM DATE VALIDATION
-======================================== */
-
-const minToday = new Date().toISOString().split("T")[0];
-
-const rentalFrom = document.getElementById("rental-date-from");
-const rentalTo = document.getElementById("rental-date-to");
-if (rentalFrom && rentalTo) {
-    rentalFrom.min = minToday;
-    rentalTo.min = minToday;
-    rentalFrom.addEventListener("change", () => {
-        rentalTo.min = rentalFrom.value;
-        if (rentalTo.value && rentalTo.value < rentalFrom.value) rentalTo.value = "";
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+    contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitToContactApi(contactForm, "/api/contact");
     });
 }
-
-const movingDate = document.getElementById("moving-date");
-if (movingDate) movingDate.min = minToday;
 
 /* ========================================
    CURRENT YEAR
@@ -334,4 +395,32 @@ if (header) {
         }
     );
 
+}
+
+/* ========================================
+   COOKIE NOTICE
+======================================== */
+const cookieNotice = document.getElementById("cookieNotice");
+const cookieNecessary = document.getElementById("cookieNecessary");
+
+function showCookieNotice() {
+    if (!cookieNotice) return;
+    try {
+        if (localStorage.getItem("vertexrent-cookie-notice") === "1") return;
+    } catch (_) {
+        // If storage is unavailable, the notice still works for the session.
+    }
+    cookieNotice.hidden = false;
+}
+
+if (cookieNotice) {
+    showCookieNotice();
+    if (cookieNecessary) {
+        cookieNecessary.addEventListener("click", () => {
+            try {
+                localStorage.setItem("vertexrent-cookie-notice", "1");
+            } catch (_) {}
+            cookieNotice.hidden = true;
+        });
+    }
 }
