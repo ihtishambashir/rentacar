@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><head>
+<html lang="en"><head>
 <!-- 
          BASIC META
      -->
@@ -49,7 +49,32 @@
     -->
 <link href="style.css" rel="stylesheet"/>
 <link href="services.css" rel="stylesheet"/>
-</head></head><body>
+<style>
+.rental-offers-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:34px}
+.rental-offer-card{position:relative;border:1px solid rgba(17,24,39,.08);border-radius:26px;padding:30px;background:#fff;box-shadow:0 16px 45px rgba(17,24,39,.08);overflow:hidden}
+.rental-offer-card-primary{background:linear-gradient(145deg,#fff 0%,#f7f9fc 100%)}
+.trailer-offer-card{background:linear-gradient(145deg,#111827 0%,#1f2937 100%);color:#fff;border-color:rgba(255,255,255,.08);box-shadow:0 18px 50px rgba(17,24,39,.20)}
+.rental-offer-topline{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.rental-offer-tag{display:inline-flex;align-items:center;min-height:32px;padding:7px 12px;border-radius:999px;background:#eef2f7;color:#111827;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.trailer-offer-card .rental-offer-tag{background:rgba(255,255,255,.10);color:#fff}
+.rental-offer-card h3{margin:0 0 12px;font-size:clamp(1.65rem,2.3vw,2.35rem);line-height:1.08;letter-spacing:-.03em}
+.rental-offer-card h3 span{display:block;margin-top:5px;font-size:.62em;font-weight:600;letter-spacing:0;opacity:.8}
+.rental-offer-card p{margin:0;line-height:1.7}
+.trailer-intro{color:rgba(255,255,255,.82);max-width:54ch}
+.trailer-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:24px}
+.trailer-specs>div{padding:14px 15px;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08)}
+.trailer-specs strong{display:block;font-size:1.08rem;line-height:1.2}
+.trailer-specs span{display:block;margin-top:5px;color:rgba(255,255,255,.62);font-size:.78rem;line-height:1.35}
+.trailer-feature-list{display:grid;gap:10px;margin-top:22px}
+.trailer-feature-list div{display:flex;align-items:flex-start;gap:10px;color:rgba(255,255,255,.88);font-size:.93rem}
+.trailer-feature-list span{color:#fff;font-weight:800}
+.trailer-pricing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:24px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12)}
+.trailer-pricing small{display:block;margin-bottom:5px;color:rgba(255,255,255,.56);font-size:.73rem;text-transform:uppercase;letter-spacing:.08em}
+.trailer-pricing strong{display:block;font-size:1.1rem;line-height:1.25}
+.trailer-pricing strong span{font-size:.75em;font-weight:500;color:rgba(255,255,255,.58)}
+@media (max-width:900px){.rental-offers-grid{grid-template-columns:1fr}}
+@media (max-width:640px){.rental-offer-card{padding:23px 20px;border-radius:20px}.trailer-specs{grid-template-columns:1fr 1fr}.trailer-pricing{grid-template-columns:1fr}.rental-offer-topline{align-items:flex-start;flex-direction:column;gap:10px}}
+</style></head><body>
 <header class="site-header">
   <div class="container nav-wrapper">
     <a href="index.html" class="logo" aria-label="VertexRent Home">
@@ -75,8 +100,8 @@
 <section class="service-page-hero rental-page-hero">
 <div class="container">
 <p class="eyebrow"><span></span> VertexRent Rental Cars</p>
-<h1>One vehicle.<br/><em>One clear booking.</em></h1>
-<p>Our rental service currently offers one available vehicle. Check your dates and send a request for availability and pricing.</p>
+<h1>Reliable rentals.<br/><em>One clear booking.</em></h1>
+<p>Choose from our currently available rental options, check your dates, and send a request for availability and pricing.</p>
 </div>
 </section>
 <section class="service-detail rental-section dedicated-form-page" id="rental-contact">
@@ -85,8 +110,45 @@
 <div><p class="eyebrow"><span></span> Rental &amp; Booking</p><h2>Request the<br/><em>available vehicle.</em></h2></div>
 <p>Your rental request is reviewed personally. We confirm availability and the final price before any payment is requested.</p>
 </div>
-<div class="rental-offer-card">
-<div><span class="eyebrow"><span></span> Available vehicle</span><h3>Our available rental vehicle</h3><p>Only the currently available vehicle is shown here. No demo fleet options are presented.</p><ul class="check-list"><li><span>✓</span> Flexible rental periods</li><li><span>✓</span> Personal availability confirmation</li><li><span>✓</span> Clear pricing before payment</li></ul></div>
+<div class="rental-offers-grid">
+  <article class="rental-offer-card rental-offer-card-primary">
+    <div class="rental-offer-topline">
+      <span class="eyebrow"><span></span> Available now</span>
+      <span class="rental-offer-tag">Rental Car</span>
+    </div>
+    <h3>Our available rental vehicle</h3>
+    <p>Only the currently available vehicle is shown here. Availability and the final price are confirmed personally before payment.</p>
+    <ul class="check-list">
+      <li><span>✓</span> Flexible rental periods</li>
+      <li><span>✓</span> Personal availability confirmation</li>
+      <li><span>✓</span> Clear pricing before payment</li>
+    </ul>
+  </article>
+
+  <article class="rental-offer-card trailer-offer-card">
+    <div class="rental-offer-topline">
+      <span class="eyebrow"><span></span> New rental option</span>
+      <span class="rental-offer-tag">Trailer</span>
+    </div>
+    <h3>Hulco Car Transport Trailer <span>3,000 kg</span></h3>
+    <p class="trailer-intro">Reliable and well-equipped trailer, ideal for vehicle transport and other heavy loads.</p>
+    <div class="trailer-specs">
+      <div><strong>3,000 kg</strong><span>Maximum permissible weight</span></div>
+      <div><strong>≈ 2,200 kg</strong><span>Payload</span></div>
+      <div><strong>2 axles</strong><span>Stable transport setup</span></div>
+      <div><strong>4.20 m</strong><span>Loading platform</span></div>
+    </div>
+    <div class="trailer-feature-list">
+      <div><span>✓</span> Electric / winch</div>
+      <div><span>✓</span> 2 aluminium loading ramps</div>
+      <div><span>✓</span> Suitable for vehicles and heavy loads</div>
+    </div>
+    <div class="trailer-pricing">
+      <div><small>Daily</small><strong>€60 <span>/ day</span></strong></div>
+      <div><small>Weekly</small><strong>€250 <span>/ week</span></strong></div>
+      <div><small>Longer rental</small><strong>On request</strong></div>
+    </div>
+  </article>
 </div>
 </div>
 </section>
@@ -114,8 +176,9 @@
 <div class="form-group">
 <label for="rental-vehicle">Selected Vehicle <span class="required-mark">*</span></label>
 <select id="rental-vehicle" name="vehicle" required="">
-<option value="">Select the available vehicle</option>
+<option value="">Select what you want to rent</option>
 <option value="Available rental vehicle">Available rental vehicle</option>
+<option value="Hulco Car Transport Trailer – 3,000 kg">Hulco Car Transport Trailer – 3,000 kg</option>
 </select>
 </div>
 </div>

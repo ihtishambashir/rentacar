@@ -160,7 +160,7 @@ a {
 
     margin-bottom: 18px;
 
-    color: #10218b;
+    color: #bcbeca;
 
     font-size: 12px;
     font-weight: 800;
@@ -171,7 +171,7 @@ a {
 .eyebrow span {
     width: 32px;
     height: 2px;
-    background: #10218b;
+    background: #cecfd7;
 }
 
 .eyebrow.light {
@@ -611,7 +611,7 @@ a {
 
 .transfer-gallery img {
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     object-fit: cover;
     transition: transform .45s ease;
 }
