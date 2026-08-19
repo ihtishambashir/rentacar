@@ -3,3 +3,6 @@
 *.png
 *.webp
 *.mp4
+
+!images/
+!images/*
