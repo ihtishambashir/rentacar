@@ -224,7 +224,7 @@ async function buildMultipartFormData(form) {
     }
 
     if (photoInput.files.length > 5) {
-        throw new Error("Please select no more than 5 photos.");
+        throw new Error("Bitte wählen Sie höchstens 5 Fotos aus.");
     }
 
     formData.delete("photos");
@@ -234,7 +234,7 @@ async function buildMultipartFormData(form) {
         const optimized = await compressImage(file);
         totalBytes += optimized.size;
         if (totalBytes > 3 * 1024 * 1024) {
-            throw new Error("Your optimized photos are too large. Please choose fewer or smaller images (max. 3 MB total).");
+            throw new Error("Die optimierten Fotos sind zu groß. Bitte wählen Sie weniger oder kleinere Bilder (max. 3 MB insgesamt).");
         }
         formData.append("photos", optimized, optimized.name);
     }
@@ -246,11 +246,11 @@ async function submitToContactApi(form, endpoint) {
     const status = form.querySelector(".service-form-status") || form.querySelector(".form-note");
     const button = form.querySelector("button[type=submit]");
 
-    setFormStatus(form, "Sending…");
+    setFormStatus(form, "Wird gesendet…");
     if (button) {
         button.disabled = true;
         button.dataset.originalText = button.textContent;
-        button.textContent = "Sending…";
+        button.textContent = "Wird gesendet…";
     }
 
     try {
@@ -262,21 +262,21 @@ async function submitToContactApi(form, endpoint) {
 
         const result = await response.json().catch(() => ({}));
         if (!response.ok) {
-            throw new Error(result.message || "The request could not be sent.");
+            throw new Error(result.message || "Die Anfrage konnte nicht gesendet werden.");
         }
 
         form.reset();
         updateRentalDuration();
         updatePhotoList();
-        setFormStatus(form, result.message || "Thank you. Your request has been sent successfully.", "is-success");
+        setFormStatus(form, result.message || "Vielen Dank. Ihre Anfrage wurde erfolgreich gesendet.", "is-success");
         return true;
     } catch (error) {
-        setFormStatus(form, error.message || "Something went wrong. Please try again.", "is-error");
+        setFormStatus(form, error.message || "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.", "is-error");
         return false;
     } finally {
         if (button) {
             button.disabled = false;
-            button.textContent = button.dataset.originalText || "Send Request";
+            button.textContent = button.dataset.originalText || "Anfrage senden";
         }
     }
 }
@@ -321,7 +321,7 @@ function updatePhotoList() {
     const files = Array.from(input.files || []);
     list.textContent = files.length
         ? files.map((file) => file.name).join(" • ")
-        : "No photos selected.";
+        : "Keine Fotos ausgewählt.";
 }
 
 const movingPhotos = document.getElementById("moving-photos");

@@ -1025,3 +1025,17 @@
     .legal-links { gap: 10px 14px; flex-wrap: wrap; }
     .footer-services { margin-top: 16px; }
 }
+
+
+/* ========================================
+   FINAL NAVIGATION / MOBILE POLISH
+======================================== */
+@media (max-width: 860px) {
+    .site-header { box-shadow: 0 8px 28px rgba(0,0,0,.06); }
+    .main-nav.open { max-height: calc(100vh - 70px); overflow-y: auto; }
+    .main-nav.open a { font-size: 14px; font-weight: 700; }
+}
+@media (max-width: 600px) {
+    .container { width: min(100% - 24px, 1180px); }
+    .hero-background { background-position: 65% center; }
+}

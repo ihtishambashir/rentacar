@@ -1796,3 +1796,75 @@ button {
         align-items: stretch;
     }
 }
+
+
+/* ========================================
+   FINAL HOMEPAGE HERO + RESPONSIVE POLISH
+======================================== */
+.hero {
+    min-height: clamp(620px, 78vh, 820px);
+    height: auto;
+    display: flex;
+    align-items: center;
+    position: relative;
+    isolation: isolate;
+}
+.hero-background {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center 58%;
+    background-repeat: no-repeat;
+    transform: scale(1.01);
+}
+.hero-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(10,12,14,.74) 0%, rgba(10,12,14,.48) 42%, rgba(10,12,14,.10) 72%, rgba(10,12,14,.05) 100%),
+      linear-gradient(180deg, rgba(10,12,14,.15), rgba(10,12,14,.32));
+}
+.hero-container {
+    min-height: clamp(620px, 78vh, 820px);
+    display: flex;
+    align-items: center;
+    padding-top: 72px;
+    padding-bottom: 72px;
+}
+.hero-content {
+    max-width: 760px;
+    color: #fff;
+}
+.hero-content::before {
+    content: "Autovermietung · Abschleppdienst · Umzug";
+    display: inline-flex;
+    margin-bottom: 20px;
+    padding: 8px 13px;
+    border: 1px solid rgba(255,255,255,.28);
+    border-radius: 999px;
+    background: rgba(0,0,0,.20);
+    backdrop-filter: blur(10px);
+    color: rgba(255,255,255,.92);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+.hero-content::after { content: none; }
+.hero h1 { text-shadow: 0 8px 32px rgba(0,0,0,.25); }
+.hero-description { color: rgba(255,255,255,.88); text-shadow: 0 3px 16px rgba(0,0,0,.18); }
+
+@media (max-width: 860px) {
+    .hero { min-height: 680px; }
+    .hero-container { min-height: 680px; }
+}
+
+@media (max-width: 700px) {
+    .hero { min-height: 610px; }
+    .hero-container { min-height: 610px; padding-top: 48px; padding-bottom: 48px; }
+    .hero-background { background-position: 62% center; }
+    .hero-content { max-width: 100%; }
+    .hero-content::before { font-size: 9px; letter-spacing: .10em; padding: 7px 10px; }
+}
