@@ -285,10 +285,14 @@ const minToday = getTodayString();
 
 const rentalFrom = document.getElementById("rental-date-from");
 const rentalTo = document.getElementById("rental-date-to");
-const rentalDuration = document.getElementById("rental-duration");
+
 
 function updateRentalDuration() {
-    if (!rentalFrom || !rentalTo || !rentalDuration) return;
+    debugger;
+    const rentalFrom = document.getElementById("rental-date-from");
+    const rentalTo = document.getElementById("rental-date-to");
+    const rentalDuration = document.getElementById("rental-duration");
+    if (!rentalFrom || !rentalTo) return;
     if (!rentalFrom.value || !rentalTo.value) {
         rentalDuration.value = "—";
         return;
@@ -307,9 +311,15 @@ if (rentalFrom && rentalTo) {
         if (rentalTo.value && rentalTo.value < rentalFrom.value) rentalTo.value = "";
         updateRentalDuration();
     });
-    rentalTo.addEventListener("change", updateRentalDuration);
-    updateRentalDuration();
+    // rentalTo.addEventListener("change", updateRentalDuration);
+    // updateRentalDuration();
 }
+
+//cretea event for change in rental duration when rentalFrom or rentalTo changes
+document.querySelector("#rental-date-to").addEventListener("change", function () {
+    debugger;
+    updateRentalDuration();
+});
 
 const movingDate = document.getElementById("moving-date");
 if (movingDate) movingDate.min = minToday;
