@@ -1869,7 +1869,3 @@ button {
     .hero-content::before { font-size: 9px; letter-spacing: .10em; padding: 7px 10px; }
 }
 
-
-.legal-links > :nth-child(-n+3) {
-  display: none;
-}
